@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모바일 이모티콘 표시</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column; /* 세로 방향으로 정렬 */
+            align-items: center; /* 수평 중앙 정렬 */
+            background-color: black; /* 배경색을 검정으로 설정 */
+        }
+
+        #animation {
+            display: none; /* 기본적으로 숨김 */
+            max-width: 100%; /* 화면에 맞게 조정 */
+            height: auto; /* 비율 유지 */
+            margin-top: 20px; /* 상단 여백 */
+        }
+
+        #topHalf {
+            flex: 1; /* 상단 절반을 차지 */
+            display: flex;
+            justify-content: center; /* 수평 중앙 정렬 */
+            align-items: center; /* 수직 중앙 정렬 */
+            width: 100%; /* 전체 너비 */
+        }
+
+        #bottomHalf {
+            flex: 1; /* 하단 절반을 차지 */
+            width: 100%; /* 전체 너비 */
+        }
+    </style>
+</head>
+<body>
+    <div id="topHalf">
+        <img id="animation" src="" alt="애니메이션"> <!-- 이모티콘 이미지 -->
+    </div>
+    <div id="bottomHalf"></div> <!-- 하단 절반은 비워둡니다 -->
+
+    <script>
+        const animation = document.getElementById('animation');
+
+        // 애니메이션 파일 매핑
+        const animationMap = {
+            '나': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '내': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '저': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '제': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '나는': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '내가': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '나를': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '내게': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '나에게': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '저는': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '저를': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '제가': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '제게': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '저에게': 'https://sangeunpark-hong.github.io/lucy/me.gif',
+            '너': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '네': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '당신': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '너는': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '너를': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '너가': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '네가': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '당신을': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '당신이': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '당신에게': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '네게': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '너에게': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '당신은': 'https://sangeunpark-hong.github.io/lucy/you.gif',
+            '너도': 'https://sangeunpark-hong.github.io/lucy/you.gif', // 추가된 매핑
+            '좋아': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '좋아요': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '좋다': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '좋네': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '그래': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '그래요': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '잘했어': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '잘했어요': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '잘한다': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '잘해요': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '알았어': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '알았어요': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '알겠어': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '알겠어요': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '싫어': 'https://sangeunpark-hong.github.io/lucy/No.gif',
+            '싫다': 'https://sangeunpark-hong.github.io/lucy/No.gif',
+            '싫어요': 'https://sangeunpark-hong.github.io/lucy/No.gif',
+            '아니': 'https://sangeunpark-hong.github.io/lucy/No.gif',
+            '아니에요': 'https://sangeunpark-hong.github.io/lucy/No.gif',
+            '아니요': 'https://sangeunpark-hong.github.io/lucy/No.gif',
+            '안': 'https://sangeunpark-hong.github.io/lucy/No.gif',
+            '아니야': 'https://sangeunpark-hong.github.io/lucy/No.gif', // 추가된 매핑
+            '나도': 'https://sangeunpark-hong.github.io/lucy/me.gif', // 추가된 매핑
+            '예': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '네': 'https://sangeunpark-hong.github.io/lucy/good.gif',
+            '응': 'https://sangeunpark-hong.github.io/lucy/good.gif', // 추가된 매핑
+            '맞아': 'https://sangeunpark-hong.github.io/lucy/good.gif', // 추가된 매핑
+            '도와줘': 'https://sangeunpark-hong.github.io/lucy/help.gif', // 추가된 매핑
+            '도와주세요': 'https://sangeunpark-hong.github.io/lucy/help.gif', // 추가된 매핑
+            '도와줄까': 'https://sangeunpark-hong.github.io/lucy/help_q.gif', // 추가된 매핑
+            '도와줄까요': 'https://sangeunpark-hong.github.io/lucy/help_q.gif', // 추가된 매핑
+            '사랑하니': 'https://sangeunpark-hong.github.io/lucy/love_q.gif', // 추가된 매핑
+            '사랑하나요': 'https://sangeunpark-hong.github.io/lucy/love_q.gif', // 추가된 매핑
+            '아주': 'https://sangeunpark-hong.github.io/lucy/very.gif',
+            '엄청': 'https://sangeunpark-hong.github.io/lucy/very.gif',
+            '너무': 'https://sangeunpark-hong.github.io/lucy/very.gif',
+            '완전': 'https://sangeunpark-hong.github.io/lucy/very.gif',
+            '더': 'https://sangeunpark-hong.github.io/lucy/very.gif',
+            '더욱': 'https://sangeunpark-hong.github.io/lucy/very.gif',
+            '많이': 'https://sangeunpark-hong.github.io/lucy/very.gif',
+            '안녕': 'https://sangeunpark-hong.github.io/lucy/HI.gif',
+            '안녕하세요': 'https://sangeunpark-hong.github.io/lucy/HI.gif',
+            '미안': 'https://sangeunpark-hong.github.io/lucy/sorry.gif',
+            '미안해요': 'https://sangeunpark-hong.github.io/lucy/sorry.gif',
+            '죄송해요': 'https://sangeunpark-hong.github.io/lucy/sorry.gif',
+            '미안해': 'https://sangeunpark-hong.github.io/lucy/sorry.gif',
+            '괜찮아': 'https://sangeunpark-hong.github.io/lucy/Thatsokay.gif',
+            '괜찮아요': 'https://sangeunpark-hong.github.io/lucy/Thatsokay.gif',
+            '축하해': 'https://sangeunpark-hong.github.io/lucy/congraturation.gif',
+            '축하해요': 'https://sangeunpark-hong.github.io/lucy/congraturation.gif',
+            '고마워': 'https://sangeunpark-hong.github.io/lucy/thanks.gif',
+            '감사해요': 'https://sangeunpark-hong.github.io/lucy/thanks.gif',
+            '고마워요': 'https://sangeunpark-hong.github.io/lucy/thanks.gif',
+            '고맙다': 'https://sangeunpark-hong.github.io/lucy/thanks.gif',
+            '사랑해': 'https://sangeunpark-hong.github.io/lucy/love.gif',
+            '사랑해요': 'https://sangeunpark-hong.github.io/lucy/love.gif'
+        };
+
+        // 음성 인식 설정
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'ko-KR';
+        recognition.continuous = true; // 계속해서 음성 인식
+        recognition.interimResults = true; // 중간 결과 활성화
+
+        recognition.onstart = () => {
+            console.log('- 음성 인식 중...');
+        };
+
+        let lastWord = '';
+        let debounceTimeout;
+
+        recognition.onresult = (event) => {
+            const text = Array.from(event.results)
+                .map(result => result[0])
+                .map(result => result.transcript)
+                .join('');
+
+            const words = text.split(' ');
+            if (words.length > 0) {
+                const currentWord = words[words.length - 1].trim(); // 현재 단어를 가져오고 공백 제거
+                console.log('현재 단어:', currentWord); // 현재 단어를 콘솔에 출력
+
+                // 디바운싱 적용
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => {
+                    if (currentWord !== lastWord) {
+                        lastWord = currentWord;
+
+                        // 애니메이션 재생
+                        if (animationMap[currentWord]) {
+                            animation.src = animationMap[currentWord];
+                            animation.style.display = 'block';
+                        } else {
+                            animation.style.display = 'none'; // 애니메이션이 없을 경우 숨김
+                        }
+                    }
+                }, 300); // 300ms 대기
+            }
+        };
+
+        recognition.onerror = (event) => {
+            console.error('오류 발생:', event.error);
+        };
+
+        recognition.onend = () => {
+            console.log('음성 인식 종료');
+            setTimeout(() => {
+                recognition.start(); // 짧은 대기 후 자동으로 다시 시작
+            }, 1000); // 1초 대기
+        };
+
+        // 모든 GIF 미리 로드
+        Object.values(animationMap).forEach(src => {
+            const img = new Image();
+            img.src = src; // 미리 로드
+        });
+
+        recognition.start();
+    </script>
+</body>
+</html>
